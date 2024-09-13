@@ -22,7 +22,7 @@
                 <p-carousel [value]="initializedTasks" [numVisible]="4" [circular]="true" verticalViewPortHeight="560px"
                     orientation="vertical" ngClass="hidePaginator">
                     <ng-template let-initializedTask pTemplate="item">
-                        <div style="text-align: center" pDraggable (onDragStart)="dragStart(initializedTask)"
+                        <div class="drop-column"  pDraggable (onDragStart)="dragStart(initializedTask)"
                             (onDragEnd)="dragEnd()" pDroppable (onDrop)="drop('INITIALIZED')">
                             <app-card-min *ngIf="initializedTask.state==='INITIALIZED'"
                                 (click)="showDialog(initializedTask.id)" [task]="initializedTask" />
@@ -37,7 +37,7 @@
                 <p-carousel [value]="asignedTasks" [numVisible]="4" [circular]="true" verticalViewPortHeight="560px"
                     orientation="vertical">
                     <ng-template let-asignedTask pTemplate="item">
-                        <div style="text-align: center" pDraggable (onDragStart)="dragStart(asignedTask)"
+                        <div class="drop-column" pDraggable (onDragStart)="dragStart(asignedTask)"
                             (onDragEnd)="dragEnd()" pDroppable (onDrop)="drop('ASSIGNED')">
                             <app-card-min *ngIf="asignedTask.state==='ASSIGNED'" (click)="showDialog(asignedTask.id)"
                                 [task]="asignedTask" />
@@ -52,7 +52,7 @@
                 <p-carousel [value]="finishedTasks" [numVisible]="4" [circular]="true" verticalViewPortHeight="560px"
                     orientation="vertical" ngClass="hidePaginator">
                     <ng-template let-finishedTask pTemplate="item">
-                        <div style="text-align: center" pDraggable (onDragStart)="dragStart(finishedTask)"
+                        <div class="drop-column" pDraggable (onDragStart)="dragStart(finishedTask)"
                             (onDragEnd)="dragEnd()" pDroppable (onDrop)="drop('FINISHED')">
                             <app-card-min *ngIf="finishedTask.state==='FINISHED'" (click)="showDialog(finishedTask.id)"
                                 [task]="finishedTask" />

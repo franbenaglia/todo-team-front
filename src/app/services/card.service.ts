@@ -35,10 +35,17 @@ export class CardService {
       { headers: new HttpHeaders({ "Authorization": "Bearer " + t }) });
   }
 
-
-  getTasksPaginated(first: number, rows: number): Observable<TaskResponse> {
+  //TODO add change java version and uncomment url version
+  getTasksPaginated(first: number, rows: number, order: string | string[], direction: number): Observable<TaskResponse> {
     let page: number = first / rows;
     let t = this.token;
+    let url = this.baseURL + 'tasks/' + page + '/' + rows;
+    if (order) {
+      let dir = direction === 1 ? 'ASC' : 'DESC';
+      url = this.baseURL + 'tasks/' + page + '/' + rows + '/' + order + '/' + dir;
+    }
+    //return this.http.get<TaskResponse>(url,
+    //  { headers: new HttpHeaders({ "Authorization": "Bearer " + t }) });
     return this.http.get<TaskResponse>(this.baseURL + 'tasks/' + page + '/' + rows,
       { headers: new HttpHeaders({ "Authorization": "Bearer " + t }) });
   }
@@ -120,7 +127,10 @@ export class CardService {
 
   addOrUpdateTaskWithFile(form: FormGroup): Observable<any> {
 
-    let t: Task = Object.assign(new Task(), form.value, {state : 'INITIALIZED'});
+    let t: Task = Object.assign(new Task(), form.value);
+    if (!t.state) {
+      t.state = 'INITIALIZED';
+    }
     let tk = this.token;
     const formModel = this.prepareSave(form);
 
@@ -144,7 +154,7 @@ export class CardService {
       { headers: headers });
 
     const postImage = this.http.post(this.baseURLImage + 'taskImage', formModel,
-     { headers: headersImage });
+      { headers: headersImage });
 
     //const postImage = this.http.post(this.urlresourceserver + '/upload', formModel,
     //  { headers: headersImage });

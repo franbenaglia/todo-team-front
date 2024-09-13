@@ -32,6 +32,10 @@ export class CardComponent implements OnInit {
 
   user: User = new User();
 
+  states: any[] = [{ state: 'INITIALIZED' }, { state: 'ASSIGNED' }, { state: 'FINISHED' }];
+
+  state: string;
+
   title: String;
 
   url: String = '';
@@ -39,12 +43,10 @@ export class CardComponent implements OnInit {
   constructor() {
   }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     if (this.task) {
       this.clearFile();
       this.loadTask();
-      console.log('laimagen: ');
-      console.log(this.image);
       this.user = this.task.user;
       this.placeHolder = this.user ? 'Change User' : 'Select user';
       this.title = this.task.title;
@@ -58,6 +60,7 @@ export class CardComponent implements OnInit {
     "description": new FormControl("", Validators.required),
     avatar: new FormControl(""),
     "user": new FormControl<User | null>(null),
+    "state": new FormControl("", Validators.required),
     //"user": new FormGroup(
     //  {
     //    id: new FormControl(),
@@ -67,6 +70,11 @@ export class CardComponent implements OnInit {
 
 
   onSubmit() {
+    
+    let state = this.form.get('state').value as any;
+    //let state = JSON.parse(statestr);
+    this.form.controls['state'].setValue(state.state);
+
     this.newCardEvent.emit(this.form);
     this.closeEvent.emit(true);
   }
@@ -88,6 +96,7 @@ export class CardComponent implements OnInit {
       dir: this.task.dir,
       description: this.task.description,
       user: this.task.user,
+      state: this.task.state
     });
   }
 

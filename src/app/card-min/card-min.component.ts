@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Task } from '../model/Task';
-import { FileUploadEvent } from 'primeng/fileupload';
 
 @Component({
   selector: 'app-card-min',

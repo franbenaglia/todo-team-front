@@ -63,9 +63,10 @@ export class TaskListComponent {
     this.tasks.length = 0;
     let first = $event ? $event.first : 1;
     let rows = $event ? $event.rows : this.rows;
-    console.log($event.sortField);
-    console.log($event.sortOrder);
-    this.cardService.getTasksPaginated(first, rows).subscribe(
+    let order = $event ? $event.sortField : 'id';
+    let direction = $event ? $event.sortOrder : 1;
+
+    this.cardService.getTasksPaginated(first, rows, order, direction).subscribe(
       (response: TaskResponse) => {
 
         this.tasks = response.tasks;

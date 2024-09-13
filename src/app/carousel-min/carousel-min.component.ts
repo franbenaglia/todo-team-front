@@ -152,54 +152,62 @@ export class CarouselMinComponent {
 
     if (this.draggedTask) {
 
-      console.log(this.draggedTask);
+      if (this.draggedTask.state !== state) {
 
-      this.draggedTask.state = state;
+        this.draggedTask.state = state;
 
-      console.log('state:' + state);
-
-      if (state === 'ASSIGNED') {
-        console.log('ASSIGNED');
-        if (this.asignedTasks.length === 1) {
-          this.asignedTasks[0].state = 'dropped';
+        if (state === 'ASSIGNED') {
+          if (this.asignedTasks.length === 1) {
+            this.asignedTasks[0].state = 'dropped';
+          }
+          let temp = [this.draggedTask, ...(this.asignedTasks as Task[])];
+          this.asignedTasks = temp.sort(this.orderState);
         }
-        this.asignedTasks = [this.draggedTask, ...(this.asignedTasks as Task[])];
-        console.log('ASSIGNED' + this.asignedTasks);
-      }
-      if (state === 'FINISHED') {
-        console.log('FINISHED');
-        if (this.finishedTasks.length === 1) {
-          this.finishedTasks[0].state = 'dropped';
+        if (state === 'FINISHED') {
+          if (this.finishedTasks.length === 1) {
+            this.finishedTasks[0].state = 'dropped';
+          }
+          let temp = [this.draggedTask, ...(this.finishedTasks as Task[])];
+          this.finishedTasks = temp.sort(this.orderState);
         }
-        this.finishedTasks = [this.draggedTask, ...(this.finishedTasks as Task[])];
-        console.log('ASSIGNED' + this.finishedTasks);
-      }
-      if (state === 'INITIALIZED') {
-        console.log('INITIALIZED');
-        if (this.initializedTasks.length === 1) {
-          this.initializedTasks[0].state = 'dropped';
+        if (state === 'INITIALIZED') {
+          if (this.initializedTasks.length === 1) {
+            this.initializedTasks[0].state = 'dropped';
+          }
+          let temp = [this.draggedTask, ...(this.initializedTasks as Task[])];
+          this.initializedTasks = temp.sort(this.orderState);
         }
-        this.initializedTasks = [this.draggedTask, ...(this.initializedTasks as Task[])];
-        console.log('ASSIGNED' + this.initializedTasks);
+
+        this.cardService.changeStateTask(this.draggedTask, state).subscribe({
+          next: (v) => {
+            console.log(v);
+            console.log('UPDATED');
+          },
+          error: (e) => {
+            console.error(e);
+            this.loadTasks();
+            //SHOW MESSAGE
+          },
+          complete: () => console.log('')
+        });
+
+        this.draggedTask = null;
+
       }
-
-      this.cardService.changeStateTask(this.draggedTask, state).subscribe({
-        next: (v) => {
-          console.log(v);
-          console.log('UPDATED');
-        },
-        error: (e) => {
-          console.error(e);
-          this.loadTasks();
-          //SHOW MESSAGE
-        },
-        complete: () => console.log('')
-      });
-
-      this.draggedTask = null;
-
     }
   }
+
+  private orderState = (a: Task, b: Task) => {
+
+    if ((a.state === 'INITIALIZED' || a.state === 'ASSIGNED' || a.state === 'FINISHED') && b.state === 'dropped') {
+      return 1;
+    } else {
+      return -1;
+    }
+    //((b.state === 'INITIALIZED' || b.state === 'ASSIGNED' || b.state === 'FINISHED') && a.state === 'dropped') 
+    //return 0;
+  }
+
 
   private findIndex(task: Task) {
     let index = -1;

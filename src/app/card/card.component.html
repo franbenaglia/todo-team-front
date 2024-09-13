@@ -21,6 +21,12 @@
             {{user.name}}
         </p>
 
+        <p><label>State:</label>
+            <p-dropdown formControlName="state" [options]="states" optionLabel="state"
+                placeholder="select state"/>
+            {{task ? task.state : ''}}
+        </p>
+
         <p>
             <!--p-fileUpload  mode="basic" chooseLabel="Choose" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*"  (onUpload)="onUpload($event)"></p-fileUpload-->
 
